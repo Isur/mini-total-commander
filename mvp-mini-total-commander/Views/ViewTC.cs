@@ -23,6 +23,9 @@ namespace mvp_mini_total_commander.Views
 
             panelTCLeft.ButtonBackClick += new EventHandler(PanelTC_ButtonBackClick);
             panelTCRight.ButtonBackClick += new EventHandler(PanelTC_ButtonBackClick);
+
+            panelTCLeft.UpdateDrives += new EventHandler(PanelTC_UpdateDrives);
+            panelTCRight.UpdateDrives += new EventHandler(PanelTC_UpdateDrives);
         }
         #region INTERFACE
         public List<string> Drives
@@ -118,6 +121,10 @@ namespace mvp_mini_total_commander.Views
         {
             ((PanelTC)sender).Path = GetParent();
             ((PanelTC)sender).Items = GetItems(((PanelTC)sender).Path);
+        }
+        private void PanelTC_UpdateDrives(object sender, EventArgs e)
+        {
+            ((PanelTC)sender).Drives = GetDrives();
         }
         #endregion
     }
