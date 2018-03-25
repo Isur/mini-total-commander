@@ -124,7 +124,9 @@ namespace mvp_mini_total_commander.Models
         {
             try
             {
-                Path =  System.IO.Directory.GetParent(System.IO.Directory.GetParent(Path).ToString()).ToString();
+                Path =  System.IO.Directory.GetParent(System.IO.Directory.GetParent(Path).ToString()).ToString() + @"\";
+                if (Path.EndsWith(@"\\"))
+                    Path = Path.Remove(Path.Length - 1);
                 return Path;
             }
             catch (Exception)
