@@ -79,6 +79,7 @@ namespace mvp_mini_total_commander.Views
         public event EventHandler ComboBoxChangeValue;
         public event EventHandler ListBoxDoubleClick;
         public event EventHandler ButtonBackClick;
+        public event EventHandler UpdateDrives;
         private void ComboBoxDrives_ChangeValue(object sender, EventArgs e)
         {
             Path = comboBoxDrives.SelectedItem.ToString();
@@ -101,7 +102,13 @@ namespace mvp_mini_total_commander.Views
                 this.ButtonBackClick(this, e);
             }
         }
-        
+        private void ComboBox_Click(object sender, EventArgs e)
+        {
+            if(this.UpdateDrives != null)
+            {
+                this.UpdateDrives(this, e);
+            }
+        }
 
         #endregion
     }
