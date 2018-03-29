@@ -18,6 +18,9 @@ namespace mvp_mini_total_commander.Presenters
             view.GetItems += getItems;
             view.GetPath += getPath;
             view.GetParent += getParent;
+            view.Copy += copyFile;
+            view.Delete += deleteFile;
+            view.Move += moveFile;
         }
 
         private List<string> getDrives()
@@ -32,9 +35,21 @@ namespace mvp_mini_total_commander.Presenters
         {
             return model.Path;
         }
-        private string getParent()
+        private string getParent(string path)
         {
-            return model.GetParent();
+            return model.GetParent(path);
+        }
+        private bool copyFile(string source, string target)
+        {
+            return model.Copy(source, target);
+        }
+        private bool moveFile(string source, string target)
+        {
+            return model.Move(source, target);
+        }
+        private bool deleteFile(string source)
+        {
+            return model.Delete(source);
         }
     }
 }

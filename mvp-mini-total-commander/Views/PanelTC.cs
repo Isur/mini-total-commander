@@ -71,6 +71,20 @@ namespace mvp_mini_total_commander.Views
                 textBoxPath.Text = value;
             }
         }
+        public string SelectedItem
+        {
+            get
+            {
+                try
+                {
+                    return listBoxItems.SelectedItem.ToString();
+                }
+                catch (Exception)
+                {
+                    throw (new Exception());
+                }
+            }
+        }
         #endregion
         #region PRIVATE
         #endregion
@@ -90,13 +104,18 @@ namespace mvp_mini_total_commander.Views
         {
             if (this.ListBoxDoubleClick != null)
             {
-                temp = listBoxItems.SelectedItem.ToString();
-                Path += temp;
-                this.ListBoxDoubleClick(this, e);
+                if(listBoxItems.SelectedItem != null)
+                {
+                    temp = listBoxItems.SelectedItem.ToString();
+                    Path += temp;
+                   this.ListBoxDoubleClick(this, e);
+
+                }
             }
         }
         private void ButtonBack_Click(object sender, EventArgs e)
         {
+            if (Path == "") return;
             if(this.ButtonBackClick != null)
             {
                 this.ButtonBackClick(this, e);

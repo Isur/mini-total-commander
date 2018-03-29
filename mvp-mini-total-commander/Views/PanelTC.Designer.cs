@@ -36,7 +36,10 @@
             // 
             // comboBoxDrives
             // 
+            this.comboBoxDrives.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(61)))), ((int)(((byte)(56)))));
             this.comboBoxDrives.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxDrives.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboBoxDrives.ForeColor = System.Drawing.Color.Silver;
             this.comboBoxDrives.FormattingEnabled = true;
             this.comboBoxDrives.ImeMode = System.Windows.Forms.ImeMode.Disable;
             this.comboBoxDrives.Location = new System.Drawing.Point(192, 3);
@@ -48,39 +51,54 @@
             // 
             // textBoxPath
             // 
+            this.textBoxPath.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(61)))), ((int)(((byte)(56)))));
+            this.textBoxPath.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxPath.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.textBoxPath.ForeColor = System.Drawing.Color.Silver;
             this.textBoxPath.Location = new System.Drawing.Point(4, 4);
             this.textBoxPath.Name = "textBoxPath";
             this.textBoxPath.ReadOnly = true;
-            this.textBoxPath.Size = new System.Drawing.Size(182, 20);
+            this.textBoxPath.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
+            this.textBoxPath.Size = new System.Drawing.Size(182, 19);
             this.textBoxPath.TabIndex = 1;
             // 
             // listBoxItems
             // 
+            this.listBoxItems.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(61)))), ((int)(((byte)(56)))));
+            this.listBoxItems.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.listBoxItems.ForeColor = System.Drawing.Color.Silver;
             this.listBoxItems.FormattingEnabled = true;
             this.listBoxItems.Location = new System.Drawing.Point(4, 62);
             this.listBoxItems.Name = "listBoxItems";
-            this.listBoxItems.Size = new System.Drawing.Size(254, 394);
+            this.listBoxItems.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.listBoxItems.Size = new System.Drawing.Size(254, 390);
             this.listBoxItems.TabIndex = 2;
             this.listBoxItems.DoubleClick += new System.EventHandler(this.ListBox_DoubleClick);
             // 
             // buttonBack
             // 
+            this.buttonBack.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(61)))), ((int)(((byte)(56)))));
+            this.buttonBack.FlatAppearance.BorderSize = 0;
+            this.buttonBack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonBack.ForeColor = System.Drawing.Color.Silver;
             this.buttonBack.Location = new System.Drawing.Point(4, 31);
             this.buttonBack.Name = "buttonBack";
             this.buttonBack.Size = new System.Drawing.Size(254, 25);
             this.buttonBack.TabIndex = 3;
             this.buttonBack.Text = "<----";
-            this.buttonBack.UseVisualStyleBackColor = true;
+            this.buttonBack.UseVisualStyleBackColor = false;
             this.buttonBack.Click += new System.EventHandler(this.ButtonBack_Click);
             // 
             // PanelTC
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.DimGray;
             this.Controls.Add(this.buttonBack);
             this.Controls.Add(this.listBoxItems);
             this.Controls.Add(this.textBoxPath);
             this.Controls.Add(this.comboBoxDrives);
+            this.ForeColor = System.Drawing.Color.DimGray;
             this.Name = "PanelTC";
             this.Size = new System.Drawing.Size(261, 459);
             this.ResumeLayout(false);

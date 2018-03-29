@@ -120,21 +120,84 @@ namespace mvp_mini_total_commander.Models
         {
             return Path;
         }
-        public string GetParent()
+        public string GetParent(string path)
         {
             try
             {
-                Path =  System.IO.Directory.GetParent(System.IO.Directory.GetParent(Path).ToString()).ToString() + @"\";
+                Path =  System.IO.Directory.GetParent(System.IO.Directory.GetParent(path).ToString()).ToString() + @"\";
                 if (Path.EndsWith(@"\\"))
                     Path = Path.Remove(Path.Length - 1);
                 return Path;
             }
             catch (Exception)
             {
-                return Path;
+                return path;
             }
         }
+        public bool Copy(string source, string target)
+        {
+            if (target.StartsWith(source)) { return false; }
 
+            if(source != target && !System.IO.File.Exists(target))
+            {
+                if (System.IO.Directory.Exists(source))
+                {
+                    System.IO.Directory.CreateDirectory(target);
+                    foreach(string dir in System.IO.Directory.GetFileSystemEntries(source))
+                    {
+                        if (System.IO.File.GetAttributes(dir).HasFlag(FileAttributes.Directory))
+                        {
+                            System.IO.Directory.CreateDirectory(target + System.IO.Path.GetFileName(dir));
+                            Copy(dir, target + System.IO.Path.GetFileName(dir));
+                        }
+                        else
+                        {
+                            Copy(dir, target+ System.IO.Path.GetFileName(dir));
+                        }
+                    }
+                    return true;
+                }
+                else if (System.IO.File.Exists(source))
+                {
+                    System.IO.File.Copy(source, target);
+                    return true;
+                }
+            }
+            return false;
+        }
+        public bool Move(string source, string target)
+        {
+            if (target.StartsWith(source)) { return false; }
+            if (source != target && System.IO.File.Exists(source))
+            {
+                Copy(source, target);
+                Delete(source);
+                return true;
+            }else if (source != target && System.IO.Directory.Exists(source))
+            {
+                Copy(source, target);
+                Delete(source);
+                return true;
+            }
+            return false;
+        }
+        public bool Delete(string source)
+        {
+            if (System.IO.File.Exists(source))
+            {
+                System.IO.File.Delete(source);
+                return true;
+            }else if(System.IO.Directory.Exists(source))
+            {
+                foreach(string file in System.IO.Directory.GetFileSystemEntries(source))
+                {
+                    Delete(file);
+                }
+                System.IO.Directory.Delete(source);
+                return true;
+            }
+            return false;
+        }
         #endregion
         #region Private
         private void updateDrives()
