@@ -101,24 +101,19 @@ namespace mvp_mini_total_commander.Models
                 }
                 catch (UnauthorizedAccessException)
                 {
-
+                    Items = GetItems(GetParent(path));
                 }
             }
             else if(System.IO.File.Exists(path))
             {
+                Console.WriteLine("test?");
                 new Thread(() =>
                 {
                     Thread.CurrentThread.IsBackground = true;
                     System.Diagnostics.Process.Start(path);
                 }).Start();
             }
-            else
-                throw new Exception(string.Format("No Folder at path: {0}", path));
             return Items;
-        }
-        public string UpdatePath()
-        {
-            return Path;
         }
         public string GetParent(string path)
         {
@@ -134,48 +129,74 @@ namespace mvp_mini_total_commander.Models
                 return path;
             }
         }
+  
         public bool Copy(string source, string target)
         {
+            if (checkAccess(source))
+                return copy(source, target);
+            else
+                return false;
+        }
+        private bool copy(string source, string target)
+        {
             if (target.StartsWith(source)) { return false; }
-
-            if(source != target && !System.IO.File.Exists(target))
+                            
+            if (source != target && !System.IO.File.Exists(target))
             {
                 if (System.IO.Directory.Exists(source))
-                {
-                    System.IO.Directory.CreateDirectory(target);
-                    foreach(string dir in System.IO.Directory.GetFileSystemEntries(source))
+                {try
                     {
-                        if (System.IO.File.GetAttributes(dir).HasFlag(FileAttributes.Directory))
+                        System.IO.Directory.CreateDirectory(target);
+                        foreach (string dir in System.IO.Directory.GetFileSystemEntries(source))
                         {
-                            System.IO.Directory.CreateDirectory(target + System.IO.Path.GetFileName(dir));
-                            Copy(dir, target + System.IO.Path.GetFileName(dir));
+                            if (System.IO.File.GetAttributes(dir).HasFlag(FileAttributes.Directory))
+                            {
+                                 System.IO.Directory.CreateDirectory(target + @"\" + System.IO.Path.GetFileName(dir));
+                                copy(dir, target + @"\" + System.IO.Path.GetFileName(dir));
+                            }
+                            else
+                            {
+                                copy(dir, target + @"\" + System.IO.Path.GetFileName(dir));
+                            }
                         }
-                        else
-                        {
-                            Copy(dir, target+ System.IO.Path.GetFileName(dir));
-                        }
+                        return true;
                     }
-                    return true;
+                    catch (UnauthorizedAccessException)
+                    {
+                        System.IO.Directory.Delete(target);
+                        return false;
+                    }
                 }
                 else if (System.IO.File.Exists(source))
                 {
-                    System.IO.File.Copy(source, target);
+                    try
+                    {
+                        System.IO.File.Copy(source, target);
+                    }
+                    catch(UnauthorizedAccessException)
+                    {
+                        return false;
+                    }
                     return true;
                 }
             }
             return false;
+
         }
         public bool Move(string source, string target)
         {
+            if(!checkAccess(source)) { return false; }
             if (target.StartsWith(source)) { return false; }
             if (source != target && System.IO.File.Exists(source))
             {
-                Copy(source, target);
+                if (!copy(source, target))
+                    return false;
                 Delete(source);
                 return true;
             }else if (source != target && System.IO.Directory.Exists(source))
             {
-                Copy(source, target);
+                if (!copy(source, target))
+                    return false;
                 Delete(source);
                 return true;
             }
@@ -183,20 +204,31 @@ namespace mvp_mini_total_commander.Models
         }
         public bool Delete(string source)
         {
-            if (System.IO.File.Exists(source))
+            if (!checkAccess(source))
+                return false;
+            try
             {
-                System.IO.File.Delete(source);
-                return true;
-            }else if(System.IO.Directory.Exists(source))
-            {
-                foreach(string file in System.IO.Directory.GetFileSystemEntries(source))
+                if (System.IO.File.Exists(source))
                 {
-                    Delete(file);
+                    System.IO.File.Delete(source);
+                    return true;
                 }
-                System.IO.Directory.Delete(source);
-                return true;
+                else if (System.IO.Directory.Exists(source))
+                {
+                    foreach (string file in System.IO.Directory.GetFileSystemEntries(source))
+                    {
+                        if (!Delete(file))
+                            return false;
+                    }
+                    System.IO.Directory.Delete(source);
+                    return true;
+                }
+                return false;
             }
-            return false;
+            catch (UnauthorizedAccessException)
+            {
+                return false;
+            }
         }
         #endregion
         #region Private
@@ -212,6 +244,26 @@ namespace mvp_mini_total_commander.Models
                 }
             }
             Drives = readyDrives;
+        }
+        private bool checkAccess(string source)
+        {
+            try
+            {
+                System.IO.File.GetAttributes(source);
+                if (System.IO.Directory.Exists(source))
+                {
+                    foreach (string dir in System.IO.Directory.GetDirectories(source))
+                    {
+                        if (!checkAccess(dir))
+                            return false;
+                    }
+                }
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return false;
+            }
+            return true;
         }
         #endregion
     }

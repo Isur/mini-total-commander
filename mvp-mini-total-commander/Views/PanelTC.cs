@@ -81,7 +81,7 @@ namespace mvp_mini_total_commander.Views
                 }
                 catch (Exception)
                 {
-                    throw (new Exception());
+                    return "";
                 }
             }
         }
@@ -99,6 +99,7 @@ namespace mvp_mini_total_commander.Views
             Path = comboBoxDrives.SelectedItem.ToString();
             if (this.ComboBoxChangeValue != null)
                 this.ComboBoxChangeValue(this, e);
+            listBoxItems.Focus();
         }
         private void ListBox_DoubleClick(object sender, EventArgs e)
         {

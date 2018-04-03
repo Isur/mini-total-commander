@@ -122,6 +122,7 @@ namespace mvp_mini_total_commander.Views
         {
             ((PanelTC)sender).Items = GetItems(((PanelTC)sender).Path);
             ((PanelTC)sender).Path = GetPath();
+            ((PanelTC)sender).Items = GetItems(((PanelTC)sender).Path);
         }
         private void PanelTC_ButtonBackClick(object sender, EventArgs e)
         {
@@ -152,44 +153,72 @@ namespace mvp_mini_total_commander.Views
 
         private void buttonCopy_Click(object sender, EventArgs e)
         {
-            if (activePanel)
+            if(LeftPath != "" && RightPath!= "")
             {
-                Console.WriteLine(Copy(LeftPath + panelTCLeft.SelectedItem, RightPath + panelTCLeft.SelectedItem));
-                RightItems = GetItems(RightPath);
-            }
-            else
-            {
-                Console.WriteLine(Copy(RightPath + panelTCRight.SelectedItem,LeftPath + panelTCRight.SelectedItem));
-                LeftItems = GetItems(LeftPath);
+                if (activePanel)
+                {
+                    if (Copy(LeftPath + panelTCLeft.SelectedItem, RightPath + panelTCLeft.SelectedItem))
+                        RightItems = GetItems(RightPath);
+                    else
+                    {
+                        Console.WriteLine("Test kupa");
+                        MessageBox.Show("Błąd, może nie masz uprawnień?\nMoże kopiujesz w to samo miejsce?");
+                    }
+                }
+                else
+                {
+                    if (Copy(RightPath + panelTCRight.SelectedItem, LeftPath + panelTCRight.SelectedItem))
+                        LeftItems = GetItems(LeftPath);
+                    else
+                    {
+                        Console.WriteLine("Test kupa 2");
+                        MessageBox.Show("Błąd, może nie masz uprawnień?\nMoże kopiujesz w to samo miejsce?");
+                    }
+                }
             }
 
         }
 
         private void buttonMove_Click(object sender, EventArgs e)
         {
-            if (activePanel)
+            if (LeftPath != "" && RightPath != "")
             {
-                Console.WriteLine(Move(LeftPath + panelTCLeft.SelectedItem, RightPath + panelTCLeft.SelectedItem));
+                if (activePanel)
+                {
+                    if (!Move(LeftPath + panelTCLeft.SelectedItem, RightPath + panelTCLeft.SelectedItem))
+                        MessageBox.Show("Błąd, może nie masz uprawnień?\n Może przenosisz w to samo miejsce?");
+                }
+                else
+                {
+                    if (!Move(RightPath + panelTCRight.SelectedItem, LeftPath + panelTCRight.SelectedItem))
+                        MessageBox.Show("Błąd, może nie masz uprawnień?\n Może przenosisz w to samo miejsce?");
+                }
+                RightItems = GetItems(RightPath);
+                LeftItems = GetItems(LeftPath);
             }
-            else
-            {
-                Console.WriteLine(Move(RightPath + panelTCRight.SelectedItem, LeftPath + panelTCRight.SelectedItem));
-            }
-            RightItems = GetItems(RightPath);
-            LeftItems = GetItems(LeftPath);
         }
 
         private void buttonDelete_Click(object sender, EventArgs e)
         {
             if (activePanel)
             {
-                Console.WriteLine(Delete(LeftPath + panelTCLeft.SelectedItem));
-                LeftItems = GetItems(LeftPath);
+                if(LeftPath != "" && panelTCLeft.SelectedItem != "")
+                {
+                    if (Delete(LeftPath + panelTCLeft.SelectedItem))
+                        LeftItems = GetItems(LeftPath);
+                    else
+                        MessageBox.Show("Błąd, może nie masz uprawnień?");
+                }
             }
             else
             {
-                Console.WriteLine(Delete(RightPath + panelTCRight.SelectedItem));
-                RightItems = GetItems(RightPath);
+                if (RightPath!="" && panelTCRight.SelectedItem != "")
+                {
+                    if (Delete(RightPath + panelTCRight.SelectedItem))
+                        RightItems = GetItems(RightPath);
+                    else
+                        MessageBox.Show("Błąd, może nie masz uprawnień?");
+                }
             }
         }
     }
